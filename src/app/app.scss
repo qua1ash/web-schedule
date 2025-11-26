@@ -1,0 +1,280 @@
+/* Основной верхний блок */
+.top-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 20vh;
+  padding: 10px 15px;
+  background-color: var(--blue-color);
+  border-bottom: 1px solid #e0e0e0;
+  box-sizing: border-box;
+  margin-top: -10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  border-radius: 0 0 30px 30px;
+}
+
+/* Верхняя строка с датой и кнопкой */
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Текст даты */
+.date-text {
+  margin-top: 25px;
+  margin-left: 15px;
+  font-size: 2.8em;
+  font-weight: 600;
+  color: #ffffff;
+  font-family: "Anonymous Pro", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Кнопка с тремя точками */
+.settings-btn {
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  cursor: pointer;
+  color: #555;
+}
+
+/* Контейнер с кнопками дней */
+.week-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-bottom: 13px;
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+/* Сами кнопки дней */
+.day-btn {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px 0;
+  text-align: center;
+  font-size: 1.4em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "Anonymous Pro", monospace;
+  font-weight: 700;
+
+}
+
+/* Маленькие числа под днями */
+.day-btn span {
+  font-size: 0.8em;
+  color: #666;
+}
+
+/* Эффект при наведении */
+.day-btn:hover {
+  background-color: #eef3ff;
+  border-color: #aac4ff;
+}
+
+/* Активная кнопка (например, сегодня) */
+.day-btn.active {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+/* Выделенная кнопка дня (выбранная в календаре) */
+.day-btn.selected {
+  background-color: #1e40af;
+  color: white;
+  border-color: #1e40af;
+}
+
+.day-btn.selected span {
+  color: white;
+}
+
+/* Контейнер с плитками */
+.lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 15px;
+}
+
+/* Каждая плитка */
+.lesson-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Верхняя строка (номер пары + время) */
+.lesson-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Номер пары */
+.lesson-order {
+  font-weight: 700;
+  font-size: 1.2em;
+  color: #3b82f6; /* синий акцент */
+}
+
+/* Время пары */
+.lesson-time {
+  font-size: 0.95em;
+  color: #555;
+}
+
+/* Название предмета */
+.lesson-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #222;
+  margin-top: 2px;
+}
+
+/* Нижняя строка (преподаватель + аудитория) */
+.lesson-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  color: #555;
+}
+
+/* Имя преподавателя */
+.lesson-teacher {
+  font-style: italic;
+}
+
+/* Номер аудитории */
+.lesson-room {
+  font-weight: 500;
+  color: #3b82f6;
+}
+
+/* Нижняя панель навигации */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 7vh;
+  background-color: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+/* Кнопки навигации */
+.nav-btn {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+/* При наведении или активной */
+.nav-btn:hover {
+  color: #3b82f6;
+}
+
+/* Иконки */
+.nav-icon {
+  width: 22px;
+  height: 22px;
+  margin-bottom: 3px;
+  object-fit: contain;
+}
+
+/* Calendar overlay */
+.calendar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.calendar-container {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* No schedule card */
+.no-schedule-card {
+  background-color: #f8fafc;
+  border-radius: 20px;
+  border: 2px dashed #cbd5e1;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  margin: 20px 0;
+}
+
+.no-schedule-content {
+  text-align: center;
+  color: #64748b;
+}
+
+.no-schedule-icon {
+  font-size: 4em;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.no-schedule-title {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #475569;
+}
+
+.no-schedule-subtitle {
+  font-size: 1em;
+  color: #64748b;
+}
+
+/* Login Dialog Styles */
+.login-dialog-panel .mat-mdc-dialog-container {
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.login-dialog-panel .mat-mdc-dialog-surface {
+  background-color: #ffffff;
+  border-radius: 20px;
+}
+

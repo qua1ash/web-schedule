@@ -1,0 +1,65 @@
+
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+}
+:root {
+    --blue-color: #76A0E0;
+    --dark-color: #000000;
+    --dark-blue-color: #1B3179;
+    --light-color: #FFF;
+}
+
+body {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    font-family: "Anonymous Pro", monospace;
+    font-weight: 1400;
+    font-style: normal;
+}
+html, body { 
+  height: 100%; 
+  overflow-x: hidden;
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Подробности урока */
+.lesson-bottom-sheet .mat-bottom-sheet-container {
+  height: 50vh; /* 2/3 экрана */
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+html {
+  scrollbar-gutter: stable both-edges;
+}

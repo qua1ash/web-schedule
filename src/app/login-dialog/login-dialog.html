@@ -1,0 +1,23 @@
+<h2 mat-dialog-title class="dialog-title">Вход в систему</h2>
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="loginForm">
+    <mat-form-field appearance="outline" class="full-width custom-field">
+      <mat-label>Логин</mat-label>
+      <input matInput formControlName="username" placeholder="Введите логин">
+      <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+        Логин обязателен
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width custom-field">
+      <mat-label>Пароль</mat-label>
+      <input matInput type="password" formControlName="password" placeholder="Введите пароль">
+      <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+        Пароль обязателен
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <button mat-raised-button class="login-btn" (click)="onLogin()" [disabled]="!loginForm.valid">Войти</button>
+</mat-dialog-actions>
