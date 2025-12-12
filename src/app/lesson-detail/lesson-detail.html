@@ -7,26 +7,33 @@
 
   <div class="homework">
     <h3>Домашнее задание</h3>
-    <textarea
-      *ngIf="data.isAdmin; else viewHomework"
-      [(ngModel)]="homework"
-      placeholder="Введите домашнее задание"
-      rows="6">
-    </textarea>
-    <ng-template #viewHomework>
+    <div *ngIf="isLoading" style="text-align: center; padding: 20px;">
+      Загрузка...
+    </div>
+    <div *ngIf="!isLoading">
       <textarea
-        [value]="homework || 'Нет домашнего задания'"
+        *ngIf="data.isAdmin; else viewHomework"
+        [(ngModel)]="homework"
+        placeholder="Введите домашнее задание"
         rows="6"
-        disabled>
+        [disabled]="isSaving">
       </textarea>
-    </ng-template>
-    <button
-      *ngIf="data.isAdmin"
-      mat-raised-button
-      color="primary"
-      (click)="saveHomework()"
-      style="margin-top: 10px;">
-      Сохранить
-    </button>
+      <ng-template #viewHomework>
+        <textarea
+          [value]="homework || 'Нет домашнего задания'"
+          rows="6"
+          disabled>
+        </textarea>
+      </ng-template>
+      <button
+        *ngIf="data.isAdmin"
+        mat-raised-button
+        color="primary"
+        (click)="saveHomework()"
+        [disabled]="isSaving"
+        style="margin-top: 10px;">
+        {{ isSaving ? 'Сохранение...' : 'Сохранить' }}
+      </button>
+    </div>
   </div>
 </div>
