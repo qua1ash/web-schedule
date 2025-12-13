@@ -1,0 +1,75 @@
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  margin-bottom: 16px;
+}
+
+.dialog-title {
+  font-family: "Anonymous Pro", monospace;
+  font-weight: 700;
+  font-size: 1.5em;
+  color: #222;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.dialog-content {
+  padding: 20px;
+}
+
+.dialog-actions {
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-btn {
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 16px;
+  padding: 12px 24px;
+  font-family: "Anonymous Pro", monospace;
+  font-weight: 600;
+  font-size: 1em;
+  transition: all 0.2s ease;
+}
+
+.login-btn:hover:not(:disabled) {
+  background-color: #1e40af;
+}
+
+.login-btn:disabled {
+  background-color: #cbd5e1;
+  color: #64748b;
+}
+
+.custom-field {
+  padding-top: 8px;
+
+  .mat-mdc-form-field-outline {
+    color: #000000;
+  }
+
+  .mat-mdc-form-field-focus-overlay {
+    background-color: transparent;
+  }
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: #000000;
+    border-width: 2px;
+  }
+
+  .mdc-notched-outline--notched .mdc-notched-outline__notch {
+    border-top: none;
+  }
+
+  &.mat-focused .mdc-notched-outline__leading,
+  &.mat-focused .mdc-notched-outline__notch,
+  &.mat-focused .mdc-notched-outline__trailing {
+    border-color: #3b82f6;
+    border-width: 2px;
+  }
+}

@@ -1,0 +1,64 @@
+<div class="top-block">
+  <div class="header-row">
+    <div class="date-text">{{ currentDate() }}</div>
+  </div>
+
+  <div class="week-buttons" #weekButtons>
+    <button class="day-btn" *ngFor="let day of days()" [class.selected]="isDaySelected(day.fullDate)" (click)="selectDayFromWeek(day.fullDate)">
+      {{ day.date }}<br><span>{{ day.dayName }}</span>
+    </button>
+  </div>
+</div>
+
+
+<!-- Calendar overlay -->
+<div class="calendar-overlay" *ngIf="showCalendar()" (click)="openCalendar()">
+  <div class="calendar-container" (click)="$event.stopPropagation()">
+    <app-calendar (daySelected)="onDaySelected($event)"></app-calendar>
+  </div>
+</div>
+
+<div class="lessons-list" #lessonsContainer>
+  <div
+    class="lesson-card"
+    *ngFor="let lesson of lessons"
+    (click)="openLessonDetail(lesson)">
+    <div class="lesson-header">
+      <div class="lesson-order">{{ lesson.order }}</div>
+      <div class="lesson-time">{{ lesson.start }} – {{ lesson.end }}</div>
+    </div>
+    <div class="lesson-body">
+      <div class="lesson-title">{{ lesson.title }}</div>
+      <div class="lesson-footer">
+        <div class="lesson-teacher">{{ lesson.teacher }}</div>
+        <div class="lesson-room">ауд. {{ lesson.room }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No schedule card when lessons array is empty -->
+  <div class="no-schedule-card" *ngIf="lessons.length === 0">
+    <div class="no-schedule-content">
+      <div class="no-schedule-icon">🥳</div>
+      <div class="no-schedule-title">Нет расписания</div>
+      <div class="no-schedule-subtitle">На этот день занятий нет</div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Нижняя панель навигации -->
+<div class="bottom-nav">
+  <button class="nav-btn" (click)="openCalendar()">
+    <img src="icons/calendar.png" alt="Календарь" class="nav-icon">
+    <span>Расписание</span>
+  </button>
+
+  <button class="nav-btn" (click)="openProfile()">
+    <img src="icons/user.png" alt="Профиль" class="nav-icon">
+    <span>Профиль</span>
+  </button>
+</div>
+

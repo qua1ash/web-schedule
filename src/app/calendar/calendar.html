@@ -1,0 +1,29 @@
+<div class="calendar">
+  <div class="calendar-header">
+    <button class="nav-btn" (click)="previousMonth()"><</button>
+    <h2>{{ getMonthName() }} {{ getYear() }}</h2>
+    <button class="nav-btn" (click)="nextMonth()">></button>
+  </div>
+
+  <div class="calendar-weekdays">
+    <div class="weekday">ПН</div>
+    <div class="weekday">ВТ</div>
+    <div class="weekday">СР</div>
+    <div class="weekday">ЧТ</div>
+    <div class="weekday">ПТ</div>
+    <div class="weekday">СБ</div>
+    <div class="weekday">ВС</div>
+  </div>
+
+  <div class="calendar-days">
+    <div
+      class="calendar-day"
+      *ngFor="let day of getDaysInMonth()"
+      [class.today]="isToday(day)"
+      [class.selected]="isSelected(day)"
+      [class.empty]="!day"
+      (click)="selectDay(day)">
+      {{ day ? day.getDate() : '' }}
+    </div>
+  </div>
+</div>

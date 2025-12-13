@@ -1,0 +1,39 @@
+<div class="lesson-detail">
+  <div class="header">
+    <h2>{{ data.title }}</h2>
+    <p>Аудитория: <strong>{{ data.room }}</strong></p>
+    <p>Преподаватель: <strong>{{ data.teacher }}</strong></p>
+  </div>
+
+  <div class="homework">
+    <h3>Домашнее задание</h3>
+    <div *ngIf="isLoading" style="text-align: center; padding: 20px;">
+      Загрузка...
+    </div>
+    <div *ngIf="!isLoading">
+      <textarea
+        *ngIf="data.isAdmin; else viewHomework"
+        [(ngModel)]="homework"
+        placeholder="Введите домашнее задание"
+        rows="6"
+        [disabled]="isSaving">
+      </textarea>
+      <ng-template #viewHomework>
+        <textarea
+          [value]="homework || 'Нет домашнего задания'"
+          rows="6"
+          disabled>
+        </textarea>
+      </ng-template>
+      <button
+        *ngIf="data.isAdmin"
+        mat-raised-button
+        color="primary"
+        (click)="saveHomework()"
+        [disabled]="isSaving"
+        style="margin-top: 10px;">
+        {{ isSaving ? 'Сохранение...' : 'Сохранить' }}
+      </button>
+    </div>
+  </div>
+</div>
