@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { LessonDetailComponent } from './lesson-detail/lesson-detail';
 import { CalendarComponent } from './calendar/calendar';
 import { LoginDialog } from './login-dialog/login-dialog';
+import { LessonsService, Lesson } from './services/lessons.service';
 
 @Component({
   selector: 'app-root',
@@ -25,12 +26,9 @@ export class App implements AfterViewInit {
 
   protected readonly title = signal('shedule');
 
-  public lessons: any[] = [
-    { order: 1, date: new Date(), start: '08:30', end: '10:00', title: 'Математический анализ', teacher: 'Иванов И.И.', room: '204' },
-    { order: 2, date: new Date(), start: '10:15', end: '11:45', title: 'Программирование', teacher: 'Петрова А.В.', room: '312' },
-    { order: 3, date: new Date(), start: '12:00', end: '13:30', title: 'Физика', teacher: 'Сидоров К.В.', room: '105' },
-    { order: 4, date: new Date(), start: '13:45', end: '15:15', title: 'История', teacher: 'Кузнецова Е.А.', room: '401' }
-  ];
+  public lessons = signal<Lesson[]>([]);
+  public isLoading = signal(false);
+  public error = signal<string | null>(null);
 
   // Current week offset from today (0 = current week, -1 = previous week, 1 = next week)
   currentWeekOffset = signal(0);
@@ -51,7 +49,7 @@ export class App implements AfterViewInit {
   isLoggedIn = signal(false);
   isAdmin = signal(false);
 
-  constructor(private bottomSheet: MatBottomSheet, private dialog: MatDialog) {
+  constructor(private bottomSheet: MatBottomSheet, private dialog: MatDialog, private lessonsService: LessonsService) {
     this.loadPersistedState();
   }
 
@@ -283,48 +281,20 @@ export class App implements AfterViewInit {
   }
 
   private loadLessonsForDate(date: Date): void {
-    // Mock data - in real app, this would fetch from API
-    // For demonstration, we'll show different lessons based on day of week
-    const dayOfWeek = date.getDay();
-
-    switch (dayOfWeek) {
-      case 1: // Monday
-        this.lessons = [
-          { order: 1, date: date, start: '08:30', end: '10:00', title: 'Математический анализ', teacher: 'Иванов И.И.', room: '204' },
-          { order: 2, date: date, start: '10:15', end: '11:45', title: 'Программирование', teacher: 'Петрова А.В.', room: '312' },
-          { order: 3, date: date, start: '12:00', end: '13:30', title: 'Физика', teacher: 'Сидоров К.В.', room: '105' }
-        ];
-        break;
-      case 2: // Tuesday
-        this.lessons = [
-          { order: 1, date: date, start: '09:00', end: '10:30', title: 'История', teacher: 'Кузнецова Е.А.', room: '401' },
-          { order: 2, date: date, start: '10:45', end: '12:15', title: 'Английский язык', teacher: 'Морозов Д.С.', room: '205' },
-          { order: 3, date: date, start: '13:00', end: '14:30', title: 'Химия', teacher: 'Волкова Т.Н.', room: '110' }
-        ];
-        break;
-      case 3: // Wednesday
-        this.lessons = [
-          { order: 1, date: date, start: '08:30', end: '10:00', title: 'Литература', teacher: 'Соколова М.П.', room: '303' },
-          { order: 2, date: date, start: '10:15', end: '11:45', title: 'География', teacher: 'Новиков А.Р.', room: '215' }
-        ];
-        break;
-      case 4: // Thursday
-        this.lessons = [
-          { order: 1, date: date, start: '09:00', end: '10:30', title: 'Биология', teacher: 'Федорова Л.К.', room: '120' },
-          { order: 2, date: date, start: '10:45', end: '12:15', title: 'Физическая культура', teacher: 'Краснов В.М.', room: 'Спортзал' },
-          { order: 3, date: date, start: '13:00', end: '14:30', title: 'Информатика', teacher: 'Зайцев П.О.', room: 'Компьютерный класс' }
-        ];
-        break;
-      case 5: // Friday
-        this.lessons = [
-          { order: 1, date: date, start: '08:30', end: '10:00', title: 'Русский язык', teacher: 'Попова С.В.', room: '201' },
-          { order: 2, date: date, start: '10:15', end: '11:45', title: 'Обществознание', teacher: 'Лебедев М.И.', room: '305' }
-        ];
-        break;
-      default: // Weekend or other days
-        this.lessons = [];
-        break;
-    }
+    this.isLoading.set(true);
+    this.error.set(null);
+    this.lessonsService.getLessonsForDate(date).subscribe({
+      next: (lessons) => {
+        this.lessons.set(lessons);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Error loading lessons:', err);
+        this.error.set('Failed to load lessons. Please try again.');
+        this.lessons.set([]);
+        this.isLoading.set(false);
+      }
+    });
   }
 }
 

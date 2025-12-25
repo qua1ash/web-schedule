@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-dialog',
@@ -14,9 +15,12 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginDialog {
   loginForm: FormGroup;
+  isLoading: boolean = false;
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
+    private http: HttpClient,
     public dialogRef: MatDialogRef<LoginDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -28,14 +32,23 @@ export class LoginDialog {
 
   onLogin(): void {
     if (this.loginForm.valid) {
+      this.isLoading = true;
+      this.errorMessage = '';
       const { username, password } = this.loginForm.value;
-      // Тестовый аккаунт администратора
-      if (username === 'admin' && password === 'admin') {
-        this.dialogRef.close({ success: true, isAdmin: true });
-      } else {
-        // Для других пользователей можно добавить логику, но пока только admin
-        this.dialogRef.close({ success: false, message: 'Неверные учетные данные' });
-      }
+      this.http.post('http://localhost:3001/api/auth/login', { Username: username, Password: password }).subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+          if (response.success) {
+            this.dialogRef.close({ success: true, isAdmin: response.isAdmin });
+          } else {
+            this.errorMessage = response.message || 'Login failed';
+          }
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = 'Network error';
+        }
+      });
     }
   }
 }

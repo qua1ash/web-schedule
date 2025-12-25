@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 export interface HomeworkResponse {
   date: string;
@@ -14,7 +14,7 @@ export interface HomeworkResponse {
   providedIn: 'root'
 })
 export class HomeworkService {
-  private readonly baseUrl = 'http://localhost:3001/api';
+  private apiUrl = 'http://localhost:3001/api/homework';
 
   constructor(private http: HttpClient) {}
 
@@ -24,7 +24,14 @@ export class HomeworkService {
    * @param order Порядок урока
    */
   getHomework(date: string, order: number): Observable<HomeworkResponse> {
-    return this.http.get<HomeworkResponse>(`${this.baseUrl}/homework/${date}/${order}`);
+    const fullUrl = `${this.apiUrl}/${date}/${order}`;
+    console.log('Calling API:', fullUrl);
+    return this.http.get<HomeworkResponse>(fullUrl).pipe(
+      map(response => {
+        console.log('API response:', response);
+        return response;
+      })
+    );
   }
 
   /**
@@ -34,8 +41,15 @@ export class HomeworkService {
    * @param homework Текст домашнего задания
    */
   saveHomework(date: string, order: number, homework: string): Observable<HomeworkResponse> {
-    return this.http.post<HomeworkResponse>(`${this.baseUrl}/homework/${date}/${order}`, {
+    const fullUrl = `${this.apiUrl}/${date}/${order}`;
+    console.log('Calling API:', fullUrl);
+    return this.http.post<HomeworkResponse>(fullUrl, {
       homework
-    });
+    }).pipe(
+      map(response => {
+        console.log('API response:', response);
+        return response;
+      })
+    );
   }
 }
