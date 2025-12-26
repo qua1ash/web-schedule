@@ -1,4 +1,5 @@
 using WebScheduleApi;
+using WebScheduleApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddScoped<DatabaseService>();
+builder.Services.AddScoped<IHomeworkRepository, HomeworkDbRepository>(); // Use PostgreSQL repository
+builder.Services.AddScoped<ILessonsRepository, LessonsDbRepository>(); // Use PostgreSQL repository
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>

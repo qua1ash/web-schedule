@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Npgsql;
 using WebScheduleApi.Models;
+using WebScheduleApi.Repositories;
 
 namespace WebScheduleApi.Controllers;
 
@@ -8,11 +8,11 @@ namespace WebScheduleApi.Controllers;
 [Route("api/homework")]
 public class HomeworkController : ControllerBase
 {
-    private readonly DatabaseService _databaseService;
+    private readonly IHomeworkRepository _homeworkRepository;
 
-    public HomeworkController(DatabaseService databaseService)
+    public HomeworkController(IHomeworkRepository homeworkRepository)
     {
-        _databaseService = databaseService;
+        _homeworkRepository = homeworkRepository;
     }
 
     [HttpGet("{date}/{order}")]
@@ -20,17 +20,7 @@ public class HomeworkController : ControllerBase
     {
         try
         {
-            if (!DateTime.TryParse(date, out var parsedDate))
-            {
-                return BadRequest("Invalid date format. Use YYYY-MM-DD.");
-            }
-
-            var query = "SELECT homework_text FROM homework WHERE date = @date AND lesson_order = @order";
-            var result = await _databaseService.ExecuteScalarAsync(query,
-                new NpgsqlParameter("@date", parsedDate.Date),
-                new NpgsqlParameter("@order", order));
-
-            var homeworkText = result?.ToString() ?? string.Empty;
+            var homeworkText = await _homeworkRepository.GetHomeworkAsync(date, order);
 
             var response = new HomeworkResponse
             {
@@ -60,21 +50,7 @@ public class HomeworkController : ControllerBase
     {
         try
         {
-            if (!DateTime.TryParse(date, out var parsedDate))
-            {
-                return BadRequest("Invalid date format. Use YYYY-MM-DD.");
-            }
-
-            var query = @"
-                INSERT INTO homework (date, lesson_order, homework_text)
-                VALUES (@date, @order, @homework)
-                ON CONFLICT (date, lesson_order)
-                DO UPDATE SET homework_text = EXCLUDED.homework_text";
-
-            await _databaseService.ExecuteNonQueryAsync(query,
-                new NpgsqlParameter("@date", parsedDate.Date),
-                new NpgsqlParameter("@order", order),
-                new NpgsqlParameter("@homework", request.Homework ?? string.Empty));
+            await _homeworkRepository.SaveHomeworkAsync(date, order, request.Homework ?? string.Empty);
 
             var response = new HomeworkResponse
             {
