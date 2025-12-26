@@ -12,6 +12,17 @@ export interface Lesson {
   room: string;
 }
 
+export interface LessonDetail {
+  order: number;
+  date: string;
+  start: string;
+  end: string;
+  title: string;
+  teacher: string;
+  room: string;
+  homework: string;
+}
+
 interface ApiLesson {
   order: number;
   date: string;
@@ -41,6 +52,18 @@ export class LessonsService {
           ...lesson,
           date: new Date(lesson.date) // Convert string to Date
         }));
+      })
+    );
+  }
+
+  getLessonDetail(date: Date, order: number): Observable<LessonDetail> {
+    const dateString = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    const fullUrl = `${this.apiUrl}/${dateString}/${order}`;
+    console.log('Calling API for lesson detail:', fullUrl);
+    return this.http.get<LessonDetail>(fullUrl).pipe(
+      map(detail => {
+        console.log('Lesson detail API response:', detail);
+        return detail;
       })
     );
   }

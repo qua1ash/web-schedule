@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { HomeworkService } from '../services/homework.service';
+import { LessonsService, LessonDetail } from '../services/lessons.service';
 
 export interface LessonData {
   order: number;
@@ -23,30 +24,43 @@ export interface LessonData {
   styleUrls: ['./lesson-detail.scss']
 })
 export class LessonDetailComponent {
+  lessonDetail: LessonDetail | null = null;
   homework: string = '';
   isLoading: boolean = false;
   isSaving: boolean = false;
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: LessonData,
-    private homeworkService: HomeworkService
+    private homeworkService: HomeworkService,
+    private lessonsService: LessonsService
   ) {
-    this.loadHomework();
+    this.loadLessonDetail();
   }
 
-  private loadHomework(): void {
-    const dateStr = this.data.date.toISOString().split('T')[0]; // YYYY-MM-DD format
+  private loadLessonDetail(): void {
     this.isLoading = true;
 
-    this.homeworkService.getHomework(dateStr, this.data.order).subscribe({
-      next: (response) => {
-        this.homework = response.homework || '';
+    this.lessonsService.getLessonDetail(this.data.date, this.data.order).subscribe({
+      next: (detail) => {
+        this.lessonDetail = detail;
+        this.homework = detail.homework || '';
         this.isLoading = false;
-        console.log('Homework loaded from backend:', response);
+        console.log('Lesson detail loaded from backend:', detail);
       },
       error: (error) => {
-        console.error('Error loading homework from backend:', error);
-        // Fallback to localStorage if backend is not available
+        console.error('Error loading lesson detail from backend:', error);
+        // Fallback to injected data and localStorage homework
+        this.lessonDetail = {
+          order: this.data.order,
+          date: this.data.date.toISOString().split('T')[0],
+          start: this.data.start,
+          end: this.data.end,
+          title: this.data.title,
+          teacher: this.data.teacher,
+          room: this.data.room,
+          homework: ''
+        };
+        const dateStr = this.data.date.toISOString().split('T')[0];
         const key = `homework_${dateStr}_${this.data.order}`;
         const saved = localStorage.getItem(key);
         this.homework = saved || '';

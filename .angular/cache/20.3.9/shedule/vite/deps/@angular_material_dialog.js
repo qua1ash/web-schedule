@@ -1,3 +1,4 @@
+import "./chunk-IRMRWSRJ.js";
 import {
   CdkDialogContainer,
   CdkPortalOutlet,
@@ -10,7 +11,6 @@ import {
   createBlockScrollStrategy,
   createGlobalPositionStrategy
 } from "./chunk-DGYSQD43.js";
-import "./chunk-IRMRWSRJ.js";
 import {
   ESCAPE,
   MatCommonModule,

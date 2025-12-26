@@ -1,8 +1,11 @@
 <div class="lesson-detail">
   <div class="header">
-    <h2>{{ data.title }}</h2>
-    <p>Аудитория: <strong>{{ data.room }}</strong></p>
-    <p>Преподаватель: <strong>{{ data.teacher }}</strong></p>
+    <h2>{{ lessonDetail?.title }}</h2>
+    <div class="time-info">
+      <p class="time">Время: <strong>{{ lessonDetail?.start }} - {{ lessonDetail?.end }}</strong></p>
+    </div>
+    <p>Аудитория: <strong>{{ lessonDetail?.room }}</strong></p>
+    <p>Преподаватель: <strong>{{ lessonDetail?.teacher }}</strong></p>
   </div>
 
   <div class="homework">
