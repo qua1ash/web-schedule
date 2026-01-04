@@ -10,18 +10,18 @@ import {
   MatSuffix
 } from "./chunk-FQVAXL7F.js";
 import {
-  getSupportedInputTypes
-} from "./chunk-TKLJ6TR4.js";
-import {
-  AutofillMonitor,
-  TextFieldModule
-} from "./chunk-GJMIYPYL.js";
-import {
   FormGroupDirective,
   NgControl,
   NgForm,
   Validators
 } from "./chunk-5OB3JFBL.js";
+import {
+  AutofillMonitor,
+  TextFieldModule
+} from "./chunk-GJMIYPYL.js";
+import {
+  getSupportedInputTypes
+} from "./chunk-TKLJ6TR4.js";
 import {
   coerceBooleanProperty
 } from "./chunk-IRMRWSRJ.js";

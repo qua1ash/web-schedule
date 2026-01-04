@@ -14,6 +14,10 @@ public class LessonsDbRepository : ILessonsRepository
 
     public async Task<List<LessonResponse>> GetLessonsForDateAsync(string date)
     {
+        if (string.IsNullOrEmpty(date))
+        {
+            throw new ArgumentNullException(nameof(date));
+        }
         if (!DateTime.TryParse(date, out var parsedDate))
         {
             throw new ArgumentException("Invalid date format");

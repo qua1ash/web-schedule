@@ -20,6 +20,11 @@ public class LessonsController : ControllerBase
     [HttpGet("{date}")]
     public async Task<IActionResult> GetLessons(string date)
     {
+        if (string.IsNullOrEmpty(date))
+        {
+            return BadRequest("Date is required");
+        }
+
         try
         {
             var lessons = await _lessonsRepository.GetLessonsForDateAsync(date);
@@ -34,6 +39,15 @@ public class LessonsController : ControllerBase
     [HttpGet("{date}/{order}")]
     public async Task<IActionResult> GetLessonDetail(string date, int order)
     {
+        if (string.IsNullOrEmpty(date))
+        {
+            return BadRequest("Date is required");
+        }
+        if (order <= 0)
+        {
+            return BadRequest("Order must be greater than 0");
+        }
+
         try
         {
             var lessonDetail = await _lessonDetailRepository.GetLessonDetailAsync(date, order);

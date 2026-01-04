@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vrPakanbFuQ=",
+  "dgSpecHash": "nqYvfPpLebM=",
   "success": true,
-  "projectFilePath": "c:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj",
+  "projectFilePath": "C:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\nettg\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\nettg\\.nuget\\packages\\efcore.namingconventions\\9.0.0\\efcore.namingconventions.9.0.0.nupkg.sha512",

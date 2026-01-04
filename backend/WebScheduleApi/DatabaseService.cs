@@ -21,6 +21,11 @@ public class DatabaseService
 
     public async Task<int> ExecuteNonQueryAsync(string query, params NpgsqlParameter[] parameters)
     {
+        if (string.IsNullOrEmpty(query))
+        {
+            throw new ArgumentNullException(nameof(query));
+        }
+
         using var connection = await GetConnectionAsync();
         using var command = new NpgsqlCommand(query, connection);
         if (parameters != null)
@@ -32,6 +37,11 @@ public class DatabaseService
 
     public async Task<object?> ExecuteScalarAsync(string query, params NpgsqlParameter[] parameters)
     {
+        if (string.IsNullOrEmpty(query))
+        {
+            throw new ArgumentNullException(nameof(query));
+        }
+
         using var connection = await GetConnectionAsync();
         using var command = new NpgsqlCommand(query, connection);
         if (parameters != null)
@@ -43,6 +53,11 @@ public class DatabaseService
 
     public async Task<NpgsqlDataReader> ExecuteReaderAsync(string query, params NpgsqlParameter[] parameters)
     {
+        if (string.IsNullOrEmpty(query))
+        {
+            throw new ArgumentNullException(nameof(query));
+        }
+
         var connection = await GetConnectionAsync();
         var command = new NpgsqlCommand(query, connection);
         if (parameters != null)
