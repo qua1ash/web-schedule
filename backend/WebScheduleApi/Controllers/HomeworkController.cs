@@ -18,6 +18,15 @@ public class HomeworkController : ControllerBase
     [HttpGet("{date}/{order}")]
     public async Task<IActionResult> GetHomework(string date, int order)
     {
+        if (string.IsNullOrEmpty(date))
+        {
+            return BadRequest("Date is required");
+        }
+        if (order <= 0)
+        {
+            return BadRequest("Order must be greater than 0");
+        }
+
         try
         {
             var homeworkText = await _homeworkRepository.GetHomeworkAsync(date, order);
@@ -48,6 +57,19 @@ public class HomeworkController : ControllerBase
     [HttpPost("{date}/{order}")]
     public async Task<IActionResult> UpsertHomework(string date, int order, [FromBody] HomeworkRequest request)
     {
+        if (string.IsNullOrEmpty(date))
+        {
+            return BadRequest("Date is required");
+        }
+        if (order <= 0)
+        {
+            return BadRequest("Order must be greater than 0");
+        }
+        if (request == null)
+        {
+            return BadRequest("Request body is required");
+        }
+
         try
         {
             await _homeworkRepository.SaveHomeworkAsync(date, order, request.Homework ?? string.Empty);
