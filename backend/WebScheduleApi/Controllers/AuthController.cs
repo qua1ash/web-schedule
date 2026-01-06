@@ -13,7 +13,7 @@ public class AuthController : ControllerBase
 
     public AuthController(DatabaseService databaseService)
     {
-        _databaseService = databaseService;
+        _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
     }
 
     [HttpPost("login")]

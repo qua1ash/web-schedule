@@ -10,7 +10,7 @@ public class LessonDetailEfRepository : ILessonDetailRepository
 
     public LessonDetailEfRepository(WebScheduleDbContext context)
     {
-        _context = context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public async Task<LessonDetailResponse?> GetLessonDetailAsync(string date, int order)

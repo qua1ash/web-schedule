@@ -13,8 +13,8 @@ public class LessonsController : ControllerBase
 
     public LessonsController(ILessonsRepository lessonsRepository, ILessonDetailRepository lessonDetailRepository)
     {
-        _lessonsRepository = lessonsRepository;
-        _lessonDetailRepository = lessonDetailRepository;
+        _lessonsRepository = lessonsRepository ?? throw new ArgumentNullException(nameof(lessonsRepository));
+        _lessonDetailRepository = lessonDetailRepository ?? throw new ArgumentNullException(nameof(lessonDetailRepository));
     }
 
     [HttpGet("{date}")]

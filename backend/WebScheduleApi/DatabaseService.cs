@@ -9,6 +9,7 @@ public class DatabaseService
 
     public DatabaseService(IConfiguration configuration)
     {
+        configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
     }
 

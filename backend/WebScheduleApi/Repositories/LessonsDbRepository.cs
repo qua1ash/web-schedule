@@ -9,7 +9,7 @@ public class LessonsDbRepository : ILessonsRepository
 
     public LessonsDbRepository(DatabaseService databaseService)
     {
-        _databaseService = databaseService;
+        _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
     }
 
     public async Task<List<LessonResponse>> GetLessonsForDateAsync(string date)

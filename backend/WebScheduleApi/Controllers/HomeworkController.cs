@@ -12,7 +12,7 @@ public class HomeworkController : ControllerBase
 
     public HomeworkController(IHomeworkRepository homeworkRepository)
     {
-        _homeworkRepository = homeworkRepository;
+        _homeworkRepository = homeworkRepository ?? throw new ArgumentNullException(nameof(homeworkRepository));
     }
 
     [HttpGet("{date}/{order}")]

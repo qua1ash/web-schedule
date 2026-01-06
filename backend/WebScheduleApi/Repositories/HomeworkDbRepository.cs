@@ -8,7 +8,7 @@ public class HomeworkDbRepository : IHomeworkRepository
 
     public HomeworkDbRepository(DatabaseService databaseService)
     {
-        _databaseService = databaseService;
+        _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
     }
 
     public async Task<string> GetHomeworkAsync(string date, int order)
