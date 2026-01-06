@@ -17,7 +17,8 @@
       </mat-error>
     </mat-form-field>
   </form>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-actions">
-  <button mat-raised-button class="login-btn" (click)="onLogin()" [disabled]="!loginForm.valid">Войти</button>
+  <button mat-raised-button class="login-btn" (click)="onLogin()" [disabled]="!loginForm.valid || isLoading">Войти</button>
 </mat-dialog-actions>

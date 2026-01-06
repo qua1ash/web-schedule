@@ -19,9 +19,27 @@
 </div>
 
 <div class="lessons-list" #lessonsContainer>
+  <!-- Loading indicator -->
+  <div class="loading-card" *ngIf="isLoading()">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Загрузка расписания...</div>
+    </div>
+  </div>
+
+  <!-- Error message -->
+  <div class="error-card" *ngIf="error()">
+    <div class="error-content">
+      <div class="error-icon">⚠️</div>
+      <div class="error-title">Ошибка загрузки</div>
+      <div class="error-subtitle">{{ error() }}</div>
+    </div>
+  </div>
+
+  <!-- Lessons list -->
   <div
     class="lesson-card"
-    *ngFor="let lesson of lessons"
+    *ngFor="let lesson of lessons()"
     (click)="openLessonDetail(lesson)">
     <div class="lesson-header">
       <div class="lesson-order">{{ lesson.order }}</div>
@@ -36,8 +54,8 @@
     </div>
   </div>
 
-  <!-- No schedule card when lessons array is empty -->
-  <div class="no-schedule-card" *ngIf="lessons.length === 0">
+  <!-- No schedule card when lessons array is empty and not loading -->
+  <div class="no-schedule-card" *ngIf="!isLoading() && !error() && lessons().length === 0">
     <div class="no-schedule-content">
       <div class="no-schedule-icon">🥳</div>
       <div class="no-schedule-title">Нет расписания</div>
