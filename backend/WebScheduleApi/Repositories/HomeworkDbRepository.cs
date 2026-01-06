@@ -8,11 +8,15 @@ public class HomeworkDbRepository : IHomeworkRepository
 
     public HomeworkDbRepository(DatabaseService databaseService)
     {
-        _databaseService = databaseService;
+        _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
     }
 
     public async Task<string> GetHomeworkAsync(string date, int order)
     {
+        if (string.IsNullOrEmpty(date))
+        {
+            throw new ArgumentNullException(nameof(date));
+        }
         if (!DateTime.TryParse(date, out var parsedDate))
         {
             throw new ArgumentException("Invalid date format");
@@ -28,6 +32,10 @@ public class HomeworkDbRepository : IHomeworkRepository
 
     public async Task SaveHomeworkAsync(string date, int order, string homework)
     {
+        if (string.IsNullOrEmpty(date))
+        {
+            throw new ArgumentNullException(nameof(date));
+        }
         if (!DateTime.TryParse(date, out var parsedDate))
         {
             throw new ArgumentException("Invalid date format");

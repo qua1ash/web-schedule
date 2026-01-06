@@ -57,7 +57,7 @@ var AsyncAnimationRendererFactory = class _AsyncAnimationRendererFactory {
    * @internal
    */
   loadImpl() {
-    const loadFn = () => this.moduleImpl ?? import("./platform-browser_false-TTSG3JCP.js").then((m) => m);
+    const loadFn = () => this.moduleImpl ?? import("./browser-GHTKEVPN.js").then((m) => m);
     let moduleImplPromise;
     if (this.loadingSchedulerFn) {
       moduleImplPromise = this.loadingSchedulerFn(loadFn);

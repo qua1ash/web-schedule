@@ -13,12 +13,25 @@ public class AuthController : ControllerBase
 
     public AuthController(DatabaseService databaseService)
     {
-        _databaseService = databaseService;
+        _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
+        if (request == null)
+        {
+            return BadRequest("Request body is required");
+        }
+        if (string.IsNullOrEmpty(request.Username))
+        {
+            return BadRequest("Username is required");
+        }
+        if (string.IsNullOrEmpty(request.Password))
+        {
+            return BadRequest("Password is required");
+        }
+
         try
         {
             var query = "SELECT password_hash, role FROM users WHERE username = @username";

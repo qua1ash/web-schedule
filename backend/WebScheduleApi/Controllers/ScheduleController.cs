@@ -11,7 +11,7 @@ public class ScheduleController : ControllerBase
 
     public ScheduleController(DatabaseService databaseService)
     {
-        _databaseService = databaseService;
+        _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
     }
 
     [HttpGet]

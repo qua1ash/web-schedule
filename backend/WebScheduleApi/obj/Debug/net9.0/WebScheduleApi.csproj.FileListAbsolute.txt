@@ -33,3 +33,8 @@ c:\Users\nettg\Desktop\barabere\web-schedule\backend\WebScheduleApi\obj\Debug\ne
 c:\Users\nettg\Desktop\barabere\web-schedule\backend\WebScheduleApi\obj\Debug\net9.0\ref\WebScheduleApi.dll
 c:\Users\nettg\Desktop\barabere\web-schedule\backend\WebScheduleApi\bin\Debug\net9.0\Npgsql.dll
 c:\Users\nettg\Desktop\barabere\web-schedule\backend\WebScheduleApi\bin\Debug\net9.0\BCrypt.Net-Next.dll
+c:\Users\nettg\Desktop\barabere\web-schedule\backend\WebScheduleApi\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
+c:\Users\nettg\Desktop\barabere\web-schedule\backend\WebScheduleApi\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+c:\Users\nettg\Desktop\barabere\web-schedule\backend\WebScheduleApi\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
+c:\Users\nettg\Desktop\barabere\web-schedule\backend\WebScheduleApi\bin\Debug\net9.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+c:\Users\nettg\Desktop\barabere\web-schedule\backend\WebScheduleApi\bin\Debug\net9.0\EFCore.NamingConventions.dll

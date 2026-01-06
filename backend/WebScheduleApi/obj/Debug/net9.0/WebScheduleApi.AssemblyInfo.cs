@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebScheduleApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d21be162746151c9802a10566de54a8b32ccaad1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+03b5d70c28095eff7f1231b0fc2117544cd330a2")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebScheduleApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebScheduleApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

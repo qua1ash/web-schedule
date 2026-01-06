@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj": {}
+    "C:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj": {}
   },
   "projects": {
-    "c:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj": {
+    "C:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj",
+        "projectUniqueName": "C:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj",
         "projectName": "WebScheduleApi",
-        "projectPath": "c:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj",
+        "projectPath": "C:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\WebScheduleApi.csproj",
         "packagesPath": "C:\\Users\\nettg\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\obj\\",
+        "outputPath": "C:\\Users\\nettg\\Desktop\\barabere\\web-schedule\\backend\\WebScheduleApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\nettg\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -48,13 +48,25 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "EFCore.NamingConventions": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.10, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
             "Npgsql": {
               "target": "Package",
-              "version": "[8.0.3, )"
+              "version": "[9.0.0, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             }
           },
           "imports": [

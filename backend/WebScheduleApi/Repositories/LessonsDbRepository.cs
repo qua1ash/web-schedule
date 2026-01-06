@@ -9,11 +9,15 @@ public class LessonsDbRepository : ILessonsRepository
 
     public LessonsDbRepository(DatabaseService databaseService)
     {
-        _databaseService = databaseService;
+        _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
     }
 
     public async Task<List<LessonResponse>> GetLessonsForDateAsync(string date)
     {
+        if (string.IsNullOrEmpty(date))
+        {
+            throw new ArgumentNullException(nameof(date));
+        }
         if (!DateTime.TryParse(date, out var parsedDate))
         {
             throw new ArgumentException("Invalid date format");
