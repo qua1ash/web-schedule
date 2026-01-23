@@ -62,4 +62,31 @@ public class LessonsController : ControllerBase
             return StatusCode(500, $"Error retrieving lesson detail: {ex.Message}");
         }
     }
+
+    [HttpDelete("{date}/{order}")]
+    public async Task<IActionResult> DeleteLesson(string date, int order)
+    {
+        if (string.IsNullOrEmpty(date))
+        {
+            return BadRequest("Date is required");
+        }
+        if (order <= 0)
+        {
+            return BadRequest("Order must be greater than 0");
+        }
+
+        try
+        {
+            var result = await _lessonDetailRepository.ToggleCancelLessonAsync(date, order);
+            if (!result)
+            {
+                return NotFound("Lesson not found or already cancelled");
+            }
+            return Ok(new { message = "Lesson cancelled successfully" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error cancelling lesson: {ex.Message}");
+        }
+    }
 }

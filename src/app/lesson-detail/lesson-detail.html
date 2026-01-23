@@ -37,6 +37,15 @@
         style="margin-top: 10px;">
         {{ isSaving ? 'Сохранение...' : 'Сохранить' }}
       </button>
+      <button
+        *ngIf="data.isEditor"
+        mat-raised-button
+        [color]="lessonDetail?.isCancelled ? 'primary' : 'warn'"
+        (click)="toggleCancelLesson()"
+        [disabled]="isDeleting"
+        style="margin-top: 10px; margin-left: 10px;">
+        {{ isDeleting ? 'Обработка...' : (lessonDetail?.isCancelled ? 'Восстановить пару' : 'Удалить пару') }}
+      </button>
     </div>
   </div>
 </div>

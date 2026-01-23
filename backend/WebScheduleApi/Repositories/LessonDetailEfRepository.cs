@@ -24,9 +24,9 @@ public class LessonDetailEfRepository : ILessonDetailRepository
             throw new ArgumentException("Invalid date format");
         }
 
-        // First, try to get actual lesson
+        // First, try to get actual lesson (including cancelled)
         var actualLesson = await _context.ActualLessons
-            .Where(al => al.Date.Date == parsedDate.Date && al.LessonOrder == order && !al.IsCancelled)
+            .Where(al => al.Date.Date == parsedDate.Date && al.LessonOrder == order)
             .Include(al => al.Subject)
             .Include(al => al.Teacher)
             .Include(al => al.Room)
@@ -44,7 +44,8 @@ public class LessonDetailEfRepository : ILessonDetailRepository
                 End = actualLesson.EndTime.ToString(@"hh\:mm"),
                 Title = actualLesson.Subject.Name,
                 Teacher = actualLesson.Teacher.FullName,
-                Room = actualLesson.Room.Name
+                Room = actualLesson.Room.Name,
+                IsCancelled = actualLesson.IsCancelled
             };
         }
         else
@@ -70,7 +71,8 @@ public class LessonDetailEfRepository : ILessonDetailRepository
                     End = template.EndTime.ToString(@"hh\:mm"),
                     Title = template.Subject.Name,
                     Teacher = template.Teacher.FullName,
-                    Room = template.Room.Name
+                    Room = template.Room.Name,
+                    IsCancelled = false
                 };
             }
         }
@@ -86,5 +88,62 @@ public class LessonDetailEfRepository : ILessonDetailRepository
         }
 
         return response;
+    }
+
+    public async Task<bool> ToggleCancelLessonAsync(string date, int order)
+    {
+        if (string.IsNullOrEmpty(date))
+        {
+            throw new ArgumentNullException(nameof(date));
+        }
+        if (!DateTime.TryParse(date, out var parsedDate))
+        {
+            throw new ArgumentException("Invalid date format");
+        }
+
+        var actualLesson = await _context.ActualLessons
+            .FirstOrDefaultAsync(al => al.Date.Date == parsedDate.Date && al.LessonOrder == order);
+
+        if (actualLesson != null)
+        {
+            // Toggle cancelled status
+            actualLesson.IsCancelled = !actualLesson.IsCancelled;
+        }
+        else
+        {
+            // Find template
+            int dayOfWeek = (int)parsedDate.DayOfWeek;
+            if (dayOfWeek == 0) dayOfWeek = 7; // Sunday is 7
+
+            var template = await _context.ScheduleTemplates
+                .Where(st => st.DayOfWeek == dayOfWeek && st.LessonOrder == order && st.IsActive)
+                .Include(st => st.Subject)
+                .Include(st => st.Teacher)
+                .Include(st => st.Room)
+                .FirstOrDefaultAsync();
+
+            if (template == null)
+            {
+                return false; // No lesson to toggle
+            }
+
+            // Create actual lesson with cancelled = true (since toggling from not existing to cancelled)
+            actualLesson = new ActualLesson
+            {
+                SubjectId = template.SubjectId,
+                TeacherId = template.TeacherId,
+                RoomId = template.RoomId,
+                Date = parsedDate,
+                LessonOrder = template.LessonOrder,
+                StartTime = template.StartTime,
+                EndTime = template.EndTime,
+                IsCancelled = true
+            };
+
+            _context.ActualLessons.Add(actualLesson);
+        }
+
+        await _context.SaveChangesAsync();
+        return true;
     }
 }

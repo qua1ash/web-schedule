@@ -17,36 +17,39 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login()
     {
-        if (request == null)
-        {
-            return BadRequest("Request body is required");
-        }
-        if (string.IsNullOrEmpty(request.Username))
-        {
-            return BadRequest("Username is required");
-        }
-        if (string.IsNullOrEmpty(request.Password))
-        {
-            return BadRequest("Password is required");
-        }
-
         try
         {
+            var authHeader = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Basic "))
+            {
+                return Unauthorized("Authorization header required");
+            }
+
+            var encodedCredentials = authHeader.Substring("Basic ".Length);
+            var credentials = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedCredentials));
+            var parts = credentials.Split(':');
+            if (parts.Length != 2)
+            {
+                return Unauthorized("Invalid credentials format");
+            }
+
+            var username = parts[0];
+            var password = parts[1];
+
             var query = "SELECT password_hash, role FROM users WHERE username = @username";
             using var reader = await _databaseService.ExecuteReaderAsync(query,
-                new NpgsqlParameter("@username", request.Username));
+                new NpgsqlParameter("@username", username));
 
             if (await reader.ReadAsync())
             {
                 var passwordHash = reader.GetString(0);
                 var role = reader.GetString(1);
 
-                if (BCrypt.Net.BCrypt.Verify(request.Password, passwordHash))
+                if (BCrypt.Net.BCrypt.Verify(password, passwordHash))
                 {
-                    var isAdmin = role == "admin";
-                    return Ok(new { success = true, isAdmin });
+                    return Ok(new { success = true, role });
                 }
             }
 
@@ -54,7 +57,7 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
-            return Ok(new { success = false, message = $"Error during login: {ex.Message}" });
+            return StatusCode(500, $"Error during login: {ex.Message}");
         }
     }
 

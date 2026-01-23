@@ -10,4 +10,5 @@ public class LessonDetailResponse
     public string Teacher { get; set; } = string.Empty;
     public string Room { get; set; } = string.Empty;
     public string Homework { get; set; } = string.Empty;
+    public bool IsCancelled { get; set; } = false;
 }

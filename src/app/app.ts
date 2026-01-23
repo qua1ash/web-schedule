@@ -48,6 +48,7 @@ export class App implements AfterViewInit {
   // User authentication
   isLoggedIn = signal(false);
   isAdmin = signal(false);
+  isEditor = signal(false);
 
   constructor(private bottomSheet: MatBottomSheet, private dialog: MatDialog, private lessonsService: LessonsService) {
     this.loadPersistedState();
@@ -200,9 +201,12 @@ export class App implements AfterViewInit {
   }
 
   openLessonDetail(lesson: any): void {
-    this.bottomSheet.open(LessonDetailComponent, {
-      data: { ...lesson, isAdmin: this.isAdmin() },
+    const bottomSheetRef = this.bottomSheet.open(LessonDetailComponent, {
+      data: { ...lesson, isAdmin: this.isAdmin(), isEditor: this.isEditor() },
       panelClass: 'lesson-bottom-sheet'
+    });
+    bottomSheetRef.afterDismissed().subscribe(() => {
+      this.loadLessonsForDate(this.selectedDay());
     });
   }
 
@@ -220,7 +224,8 @@ export class App implements AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
         this.isLoggedIn.set(true);
-        this.isAdmin.set(result.isAdmin || false);
+        this.isAdmin.set(result.role === 'admin');
+        this.isEditor.set(result.role === 'editor');
         console.log('Login successful:', result);
       } else if (result && !result.success) {
         console.log('Login failed:', result.message);

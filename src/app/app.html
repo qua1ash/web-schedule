@@ -44,6 +44,7 @@
     <div class="lesson-header">
       <div class="lesson-order">{{ lesson.order }}</div>
       <div class="lesson-time">{{ lesson.start }} – {{ lesson.end }}</div>
+      <div class="cancelled-badge" *ngIf="lesson.isCancelled">ОТМЕНЕНА</div>
     </div>
     <div class="lesson-body">
       <div class="lesson-title">{{ lesson.title }}</div>
