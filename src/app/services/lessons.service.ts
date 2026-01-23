@@ -10,6 +10,7 @@ export interface Lesson {
   title: string;
   teacher: string;
   room: string;
+  isCancelled?: boolean;
 }
 
 export interface LessonDetail {
@@ -21,6 +22,7 @@ export interface LessonDetail {
   teacher: string;
   room: string;
   homework: string;
+  isCancelled?: boolean;
 }
 
 interface ApiLesson {
@@ -31,6 +33,7 @@ interface ApiLesson {
   title: string;
   teacher: string;
   room: string;
+  isCancelled?: boolean;
 }
 
 @Injectable({
@@ -66,5 +69,12 @@ export class LessonsService {
         return detail;
       })
     );
+  }
+
+  toggleCancelLesson(date: Date, order: number): Observable<any> {
+    const dateString = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    const fullUrl = `${this.apiUrl}/${dateString}/${order}`;
+    console.log('Calling API to toggle cancel lesson:', fullUrl);
+    return this.http.delete(fullUrl);
   }
 }

@@ -25,14 +25,14 @@ public class LessonsDbRepository : ILessonsRepository
 
         var lessons = new List<LessonResponse>();
 
-        // First, try to get actual lessons
+        // First, try to get actual lessons (including cancelled)
         var actualQuery = @"
-            SELECT al.lesson_order, al.date, al.start_time::text, al.end_time::text, s.name, t.full_name, r.name
+            SELECT al.lesson_order, al.date, al.start_time::text, al.end_time::text, s.name, t.full_name, r.name, al.is_cancelled
             FROM actual_lessons al
             JOIN subjects s ON al.subject_id = s.id
             JOIN teachers t ON al.teacher_id = t.id
             JOIN rooms r ON al.room_id = r.id
-            WHERE al.date = @date AND al.is_cancelled = false
+            WHERE al.date = @date
             ORDER BY al.lesson_order";
 
         using (var reader = await _databaseService.ExecuteReaderAsync(actualQuery,
@@ -48,41 +48,57 @@ public class LessonsDbRepository : ILessonsRepository
                     End = reader.GetString(3),
                     Title = reader.GetString(4),
                     Teacher = reader.GetString(5),
-                    Room = reader.GetString(6)
+                    Room = reader.GetString(6),
+                    IsCancelled = reader.GetBoolean(7)
                 });
             }
         }
 
-        // If no actual lessons, get from templates
-        if (!lessons.Any())
+        // Get existing orders from actual lessons
+        var existingOrders = lessons.Select(l => l.Order).ToHashSet();
+
+        // Get from templates for orders not in actual
+        int dayOfWeek = (int)parsedDate.DayOfWeek;
+        if (dayOfWeek == 0) dayOfWeek = 7; // Sunday is 7
+
+        var templateQuery = @"
+            SELECT st.lesson_order, @date::date, st.start_time::text, st.end_time::text, s.name, t.full_name, r.name
+            FROM schedule_templates st
+            JOIN subjects s ON st.subject_id = s.id
+            JOIN teachers t ON st.teacher_id = t.id
+            JOIN rooms r ON st.room_id = r.id
+            WHERE st.day_of_week = @dayOfWeek AND st.is_active = true AND st.lesson_order NOT IN (@existingOrders)
+            ORDER BY st.lesson_order";
+
+        // Since NOT IN with variable, better to filter in code
+        var templateQuerySimple = @"
+            SELECT st.lesson_order, @date::date, st.start_time::text, st.end_time::text, s.name, t.full_name, r.name
+            FROM schedule_templates st
+            JOIN subjects s ON st.subject_id = s.id
+            JOIN teachers t ON st.teacher_id = t.id
+            JOIN rooms r ON st.room_id = r.id
+            WHERE st.day_of_week = @dayOfWeek AND st.is_active = true
+            ORDER BY st.lesson_order";
+
+        using (var reader = await _databaseService.ExecuteReaderAsync(templateQuerySimple,
+            new NpgsqlParameter("@date", parsedDate.Date),
+            new NpgsqlParameter("@dayOfWeek", dayOfWeek)))
         {
-            int dayOfWeek = (int)parsedDate.DayOfWeek;
-            if (dayOfWeek == 0) dayOfWeek = 7; // Sunday is 7
-
-            var templateQuery = @"
-                SELECT st.lesson_order, @date::date, st.start_time::text, st.end_time::text, s.name, t.full_name, r.name
-                FROM schedule_templates st
-                JOIN subjects s ON st.subject_id = s.id
-                JOIN teachers t ON st.teacher_id = t.id
-                JOIN rooms r ON st.room_id = r.id
-                WHERE st.day_of_week = @dayOfWeek AND st.is_active = true
-                ORDER BY st.lesson_order";
-
-            using (var reader = await _databaseService.ExecuteReaderAsync(templateQuery,
-                new NpgsqlParameter("@date", parsedDate.Date),
-                new NpgsqlParameter("@dayOfWeek", dayOfWeek)))
+            while (await reader.ReadAsync())
             {
-                while (await reader.ReadAsync())
+                var order = reader.GetInt32(0);
+                if (!existingOrders.Contains(order))
                 {
                     lessons.Add(new LessonResponse
                     {
-                        Order = reader.GetInt32(0),
+                        Order = order,
                         Date = parsedDate.ToString("yyyy-MM-dd"),
                         Start = reader.GetString(2),
                         End = reader.GetString(3),
                         Title = reader.GetString(4),
                         Teacher = reader.GetString(5),
-                        Room = reader.GetString(6)
+                        Room = reader.GetString(6),
+                        IsCancelled = false
                     });
                 }
             }

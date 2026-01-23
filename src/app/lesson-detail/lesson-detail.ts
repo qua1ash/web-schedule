@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,7 @@ export interface LessonData {
   teacher: string;
   room: string;
   isAdmin?: boolean;
+  isEditor?: boolean;
 }
 
 @Component({
@@ -28,9 +29,11 @@ export class LessonDetailComponent {
   homework: string = '';
   isLoading: boolean = false;
   isSaving: boolean = false;
+  isDeleting: boolean = false;
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: LessonData,
+    private bottomSheetRef: MatBottomSheetRef<LessonDetailComponent>,
     private homeworkService: HomeworkService,
     private lessonsService: LessonsService
   ) {
@@ -89,5 +92,30 @@ export class LessonDetailComponent {
         this.isSaving = false;
       }
     });
+  }
+
+  toggleCancelLesson(): void {
+    const isCancelling = !this.lessonDetail?.isCancelled;
+    const message = isCancelling ? 'Вы уверены, что хотите отменить эту пару?' : 'Вы уверены, что хотите восстановить эту пару?';
+    console.log('Toggle button clicked, isCancelling:', isCancelling);
+    if (confirm(message)) {
+      console.log('Confirmed, toggling lesson cancel');
+      this.isDeleting = true;
+      this.lessonsService.toggleCancelLesson(this.data.date, this.data.order).subscribe({
+        next: (response) => {
+          console.log('Lesson toggled:', response);
+          this.isDeleting = false;
+          // Close the bottom sheet
+          this.bottomSheetRef.dismiss();
+        },
+        error: (error) => {
+          console.error('Error toggling lesson:', error);
+          this.isDeleting = false;
+          alert('Ошибка при обработке пары');
+        }
+      });
+    } else {
+      console.log('Toggle cancelled');
+    }
   }
 }

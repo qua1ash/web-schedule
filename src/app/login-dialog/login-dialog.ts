@@ -35,11 +35,13 @@ export class LoginDialog {
       this.isLoading = true;
       this.errorMessage = '';
       const { username, password } = this.loginForm.value;
-      this.http.post('http://localhost:3001/api/auth/login', { Username: username, Password: password }).subscribe({
+      const credentials = btoa(`${username}:${password}`);
+      const headers = { 'Authorization': `Basic ${credentials}` };
+      this.http.post('http://localhost:3001/api/auth/login', {}, { headers }).subscribe({
         next: (response: any) => {
           this.isLoading = false;
           if (response.success) {
-            this.dialogRef.close({ success: true, isAdmin: response.isAdmin });
+            this.dialogRef.close({ success: true, role: response.role });
           } else {
             this.errorMessage = response.message || 'Login failed';
           }

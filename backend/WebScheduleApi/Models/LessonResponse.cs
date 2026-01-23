@@ -9,4 +9,5 @@ public class LessonResponse
     public string Title { get; set; } = string.Empty;
     public string Teacher { get; set; } = string.Empty;
     public string Room { get; set; } = string.Empty;
+    public bool IsCancelled { get; set; } = false;
 }
